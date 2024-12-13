@@ -26,7 +26,10 @@ def check_input(index: int, entries: list[dict[str, Any]]) -> None:
 
 
 def duration_parser(start: str, end: str) -> float:
-    return (datetime.strptime(end, "%Y-%m-%dT%H:%M:%SZ") - datetime.strptime(start, "%Y-%m-%dT%H:%M:%SZ")).total_seconds()
+    time_format = "%Y-%m-%dT%H:%M:%SZ"
+    return (
+        datetime.strptime(end, time_format) - datetime.strptime(start, time_format)
+        ).total_seconds()
 
 
 def get_time(duration: float) -> str:
@@ -71,7 +74,9 @@ def main():
 
     unique_dates = defaultdict(lambda: defaultdict(float))
     for time_entrie in user_time_entries:
-        unique_dates[time_entrie['timeInterval']['start'][:10]][time_entrie['taskId']] += duration_parser(time_entrie['timeInterval']['start'], time_entrie['timeInterval']['end'])
+        unique_dates[time_entrie['timeInterval']['start'][:10]][time_entrie['taskId']] += duration_parser(
+            time_entrie['timeInterval']['start'], time_entrie['timeInterval']['end']
+        )
 
     for key, value in unique_dates.items():
         print(key)
